@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Modern Banking App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #a29bfe;
+            --secondary: #00cec9;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+            --white: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--white) 0%, #f8f9ff 100%);
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 80px;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 25px 25px 0 0;
+            z-index: 0;
+        }
+        
+        .header {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .back-btn {
+            color: var(--white);
+            font-size: 20px;
+            text-decoration: none;
+        }
+        
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--white);
+        }
+        
+        .settings-card {
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .profile-email {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .settings-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+        
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+        
+        .settings-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: rgba(108, 92, 231, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            color: var(--primary);
+            font-size: 18px;
+        }
+        
+        .settings-details {
+            flex: 1;
+        }
+        
+        .settings-title {
+            font-weight: 500;
+        }
+        
+        .settings-desc {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 420px;
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999;
+            font-size: 12px;
+            text-decoration: none;
+        }
+        
+        .nav-item.active {
+            color: var(--primary);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .modal-text {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .cancel-btn {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        
+        .confirm-btn {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .security-badge {
+            display: flex;
+            align-items: center;
+            background-color: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .badge-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            color: var(--success);
+        }
+        
+        .badge-text {
+            flex: 1;
+        }
+        
+        .badge-title {
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        
+        .badge-desc {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-btn">←</a>
+            <div class="page-title">Settings</div>
+            <div style="width: 24px;"></div> <!-- Spacer for alignment -->
+        </div>
+        
+        <div class="settings-card">
+            <div class="user-profile">
+                <div class="profile-avatar">RC</div>
+                <div class="profile-info">
+                    <div class="profile-name">user</div>
+                    <div class="profile-email">....@example.com</div>
+                </div>
+                <div>✏️</div>
+            </div>
+            
+            <div class="security-badge">
+                <div class="badge-icon">🔒</div>
+                <div class="badge-text">
+                    <div class="badge-title">Security Level: Strong</div>
+                    <div class="badge-desc">Your account is protected with 2FA and biometrics</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="settings-card">
+            <div class="settings-item" onclick="openSection('account')">
+                <div class="settings-icon">👤</div>
+                <div class="settings-details">
+                    <div class="settings-title">Account Settings</div>
+                    <div class="settings-desc">Update profile, change password</div>
+                </div>
+                <div>→</div>
+            </div>
+            
+            <div class="settings-item" onclick="openSection('security')">
+                <div class="settings-icon">🔒</div>
+                <div class="settings-details">
+                    <div class="settings-title">Security</div>
+                    <div class="settings-desc">2FA, biometrics, login alerts</div>
+                </div>
+                <div>→</div>
+            </div>
+            
+            <div class="settings-item" onclick="openSection('notifications')">
+                <div class="settings-icon">🔔</div>
+                <div class="settings-details">
+                    <div class="settings-title">Notifications</div>
+                    <div class="settings-desc">Manage alerts and preferences</div>
+                </div>
+                <div>→</div>
+            </div>
+        </div>
+        
+        <div class="settings-card">
+            <div class="settings-item" onclick="openSection('privacy')">
+                <div class="settings-icon">👁️</div>
+                <div class="settings-details">
+                    <div class="settings-title">Privacy</div>
+                    <div class="settings-desc">Data sharing, visibility settings</div>
+                </div>
+                <div>→</div>
+            </div>
+            
+            <div class="settings-item" onclick="openSection('appearance')">
+                <div class="settings-icon">🎨</div>
+                <div class="settings-details">
+                    <div class="settings-title">Appearance</div>
+                    <div class="settings-desc">Dark mode, theme colors</div>
+                </div>
+                <div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="settings-item" onclick="openSection('language')">
+                <div class="settings-icon">🌐</div>
+                <div class="settings-details">
+                    <div class="settings-title">Language</div>
+                    <div class="settings-desc">English (United States)</div>
+                </div>
+                <div>→</div>
+            </div>
+        </div>
+        
+        <div class="settings-card">
+            <div class="settings-item" onclick="openSection('help')">
+                <div class="settings-icon">❓</div>
+                <div class="settings-details">
+                    <div class="settings-title">Help & Support</div>
+                    <div class="settings-desc">FAQs, contact customer service</div>
+                </div>
+                <div>→</div>
+            </div>
+            
+            <div class="settings-item" onclick="openSection('about')">
+                <div class="settings-icon">ℹ️</div>
+                <div class="settings-details">
+                    <div class="settings-title">About</div>
+                    <div class="settings-desc">App version, terms of service</div>
+                </div>
+                <div>→</div>
+            </div>
+            
+            <div class="settings-item" onclick="showLogoutModal()">
+                <div class="settings-icon">🚪</div>
+                <div class="settings-details">
+                    <div class="settings-title">Log Out</div>
+                    <div class="settings-desc">Sign out of your account</div>
+                </div>
+                <div>→</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Logout Modal -->
+    <div class="modal" id="logoutModal">
+        <div class="modal-content">
+            <div class="modal-title">Log Out</div>
+            <div class="modal-text">
+                Are you sure you want to log out of your account?
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn cancel-btn" onclick="closeModal('logoutModal')">Cancel</button>
+                <button class="modal-btn confirm-btn" onclick="logout()">Log Out</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dark Mode Modal -->
+    <div class="modal" id="darkModeModal">
+        <div class="modal-content">
+            <div class="modal-title">Dark Mode</div>
+            <div class="modal-text">
+                Dark mode will be applied after you restart the app. Restart now?
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn cancel-btn" onclick="closeModal('darkModeModal')">Later</button>
+                <button class="modal-btn confirm-btn" onclick="applyDarkMode()">Restart Now</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="nav">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon">🏠</div>
+            <div>Home</div>
+        </a>
+        <a href="stats.html" class="nav-item">
+            <div class="nav-icon">📊</div>
+            <div>Stats</div>
+        </a>
+        <a href="tasks.html" class="nav-item">
+            <div class="nav-icon">✅</div>
+            <div>Tasks</div>
+        </a>
+        <a href="settings.html" class="nav-item active">
+            <div class="nav-icon">⚙️</div>
+            <div>Settings</div>
+        </a>
+    </div>
+
+    <script>
+        // Open settings section
+        function openSection(section) {
+            if (section === 'appearance') {
+                return; // Already handled by toggle
+            }
+            alert(`Opening ${section} section...`);
+            // In a real app, you would navigate to the specific settings page
+        }
+        
+        // Show logout confirmation
+        function showLogoutModal() {
+            document.getElementById('logoutModal').style.display = 'flex';
+        }
+        
+        // Logout function
+        function logout() {
+            alert('You have been logged out. Redirecting to login page...');
+            closeModal('logoutModal');
+            // In a real app, you would:
+            // 1. Clear user session/token
+            // 2. Redirect to login page
+        }
+        
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Dark mode toggle
+        document.getElementById('darkModeToggle').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('darkModeModal').style.display = 'flex';
+            } else {
+                document.getElementById('darkModeModal').style.display = 'flex';
+            }
+        });
+        
+        // Apply dark mode
+        function applyDarkMode() {
+            alert('Dark mode settings saved. App will restart...');
+            closeModal('darkModeModal');
+            // In a real app, you would:
+            // 1. Save preference to local storage
+            // 2. Restart the app or apply changes dynamically
+        }
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for saved dark mode preference
+            const darkModeEnabled = localStorage.getItem('darkMode') === 'true';
+            document.getElementById('darkModeToggle').checked = darkModeEnabled;
+            
+            // You could also:
+            // - Load user profile data
+            // - Check security settings
+            // - Set up other preferences
+        });
+    </script>
+</body>
+</html>

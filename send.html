@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #a29bfe;
+            --secondary: #00cec9;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+            --white: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--white) 0%, #f8f9ff 100%);
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 80px;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 25px 25px 0 0;
+            z-index: 0;
+        }
+        
+        .header {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .back-btn {
+            color: var(--white);
+            font-size: 20px;
+            text-decoration: none;
+        }
+        
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--white);
+        }
+        
+        .withdraw-card {
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .amount-input {
+            position: relative;
+        }
+        
+        .currency-symbol {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .amount-field {
+            padding-left: 30px;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        
+        .submit-btn:hover {
+            background-color: #5a4bc9;
+        }
+        
+        .submit-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 420px;
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999;
+            font-size: 12px;
+            text-decoration: none;
+        }
+        
+        .nav-item.active {
+            color: var(--primary);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .modal-text {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .modal-details {
+            background-color: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .detail-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .detail-label {
+            color: #666;
+        }
+        
+        .detail-value {
+            font-weight: 500;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .cancel-btn {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        
+        .confirm-btn {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .success-icon {
+            text-align: center;
+            font-size: 50px;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+        
+        .activation-required {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .activation-icon {
+            font-size: 50px;
+            color: var(--warning);
+            margin-bottom: 15px;
+        }
+        
+        .activation-text {
+            margin-bottom: 20px;
+        }
+        
+        .activation-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .account-details {
+            background-color: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .copy-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-btn">←</a>
+            <div class="page-title">send money</div>
+            <div style="width: 24px;"></div> <!-- Spacer for alignment -->
+        </div>
+        
+        <div class="withdraw-card" id="withdrawForm">
+            <div class="form-group">
+                <label class="form-label">Select Bank</label>
+                <select class="form-input" id="bankName">
+                    <option value="">Select your bank</option>
+                    <option value="access">Access Bank</option>
+                    <option value="citibank">Citibank Nigeria</option>
+                    <option value="ecobank">Ecobank Nigeria</option>
+                    <option value="fidelity">Fidelity Bank</option>
+                    <option value="firstbank">First Bank of Nigeria</option>
+                    <option value="fcmb">First City Monument Bank (FCMB)</option>
+                    <option value="gtb">Guaranty Trust Bank (GTB)</option>
+                    <option value="heritage">Heritage Bank</option>
+                    <option value="keystone">Keystone Bank</option>
+                    <option value="polaris">Polaris Bank</option>
+                    <option value="providus">Providus Bank</option>
+                    <option value="stanbic">Stanbic IBTC Bank</option>
+                    <option value="standard">Standard Chartered Bank</option>
+                    <option value="sterling">Sterling Bank</option>
+                    <option value="suntrust">Suntrust Bank</option>
+                    <option value="union">Union Bank of Nigeria</option>
+                    <option value="uba">United Bank for Africa (UBA)</option>
+                    <option value="unity">Unity Bank</option>
+                    <option value="wema">Wema Bank</option>
+                    <option value="zenith">Zenith Bank</option>
+                    <option value="jaiz">Jaiz Bank</option>
+                    <option value="kuda">Kuda Bank</option>
+                    <option value="rubies">Rubies Bank</option>
+                    <option value="sparkle">Sparkle Microfinance Bank</option>
+                    <option value="palmcredit">PalmCredit</option>
+                    <option value="alpher">Alpher</option>
+                    <option value="eyowo">Eyowo</option>
+                    <option value="vfd">VFD Microfinance Bank</option>
+                    <option value="moniepoint">Moniepoint Microfinance Bank</option>
+                    <option value="opal">Opal Microfinance Bank</option>
+                    <option value="parkway">Parkway ReadyCash</option>
+                    <option value="firmus">Firmus MFB</option>
+                    <option value="mutual">Mutual Trust Microfinance Bank</option>
+                    <option value="hasal">Hasal Microfinance Bank</option>
+                    <option value="parallex">Parallex Bank</option>
+                    <option value="trustbond">Trustbond Mortgage Bank</option>
+                    <option value="npf">NPF Microfinance Bank</option>
+                    <option value="fsdh">FSDH Merchant Bank</option>
+                    <option value="coronation">Coronation Merchant Bank</option>
+                    <option value="rand">Rand Merchant Bank</option>
+                    <option value="nova">Nova Merchant Bank</option>
+                  <option value="nova">Opay</option>
+                  </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Account Number</label>
+                <input type="text" class="form-input" placeholder="Enter account number" id="accountNumber">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Account Name</label>
+                <input type="text" class="form-input" placeholder="Enter account name" id="accountName">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Amount (₦)</label>
+                <div class="amount-input">
+                    <span class="currency-symbol">₦</span>
+                    <input type="number" class="form-input amount-field" placeholder="1000" id="withdrawAmount">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Description (Optional)</label>
+                <input type="text" class="form-input" placeholder="e.g. For personal use" id="withdrawDescription">
+            </div>
+            
+            <button class="submit-btn" onclick="checkActivation()">Withdraw</button>
+        </div>
+    </div>
+    
+    <!-- Activation Required Modal -->
+    <div class="modal" id="activationModal">
+        <div class="modal-content">
+            <div class="activation-required">
+                <div class="activation-icon">🔒</div>
+                <div class="modal-title">Account Activation Required</div>
+                <div class="activation-text">
+                    To withdraw money, you need to activate your account by making a deposit of ₦1,000.
+                </div>
+                
+                <div class="account-details">
+                    <div class="account-item">
+                        <strong>Bank Name:</strong> PalmPay<br>
+                        <strong>Account Number:</strong> 6683695069<br>
+                        <strong>Account Name:</strong> Billpoint
+                        <button class="copy-btn" onclick="copyToClipboard('6683695069')">Copy Account Number</button>
+                    </div>
+                    
+                    <div class="account-item">
+                        <strong>Bank Name:</strong> Safe Haven MFB<br>
+                        <strong>Account Number:</strong> 6022847162<br>
+                        <strong>Account Name:</strong> Billpoint
+                        <button class="copy-btn" onclick="copyToClipboard('6022847162')">Copy Account Number</button>
+                    </div>
+                </div>
+                
+                <div class="modal-text">
+                    After making your deposit, contact support with proof of payment to activate your account.
+                </div>
+                
+                <button class="activation-btn" onclick="closeModal('activationModal')">I Understand</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-title">Confirm Withdrawal</div>
+            <div class="modal-text">
+                Please confirm the details of your withdrawal:
+            </div>
+            
+            <div class="modal-details">
+                <div class="detail-row">
+                    <span class="detail-label">Bank:</span>
+                    <span class="detail-value" id="confirmBank">Access Bank</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Account Number:</span>
+                    <span class="detail-value" id="confirmAccount">0123456789</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Account Name:</span>
+                    <span class="detail-value" id="confirmName">John Doe</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Amount:</span>
+                    <span class="detail-value" id="confirmAmount">₦5,000.00</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Fee:</span>
+                    <span class="detail-value">₦25.00</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Total:</span>
+                    <span class="detail-value" id="confirmTotal">₦5,025.00</span>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn cancel-btn" onclick="closeModal('confirmModal')">Cancel</button>
+                <button class="modal-btn confirm-btn" onclick="processWithdrawal()">Confirm</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="success-icon">✓</div>
+            <div class="modal-title">Withdrawal Successful!</div>
+            <div class="modal-text" id="successMessage">
+                Your withdrawal of ₦5,000 to Access Bank (0123456789) is being processed.
+            </div>
+            <button class="modal-btn confirm-btn" style="width: 100%;" onclick="closeModal('successModal')">Done</button>
+        </div>
+    </div>
+    
+    <div class="nav">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon">🏠</div>
+            <div>Home</div>
+        </a>
+        <a href="stats.html" class="nav-item">
+            <div class="nav-icon">📊</div>
+            <div>Stats</div>
+        </a>
+        <a href="tasks.html" class="nav-item">
+            <div class="nav-icon">✅</div>
+            <div>Tasks</div>
+        </a>
+        <a href="settings.html" class="nav-item active">
+            <div class="nav-icon">⚙️</div>
+            <div>Settings</div>
+        </a>
+    </div>
+
+    <script>
+        // Check if account is activated (for demo, set to false)
+        let isActivated = false;
+        
+        // Check activation status before withdrawal
+        function checkActivation() {
+            const bank = document.getElementById('bankName').value;
+            const accountNumber = document.getElementById('accountNumber').value;
+            const accountName = document.getElementById('accountName').value;
+            const amount = document.getElementById('withdrawAmount').value;
+            
+            if (!bank || !accountNumber || !accountName || !amount) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            if (amount < 1000) {
+                alert('Minimum withdrawal amount is ₦1,000');
+                return;
+            }
+            
+            if (isActivated) {
+                showConfirmation();
+            } else {
+                document.getElementById('activationModal').style.display = 'flex';
+            }
+        }
+        
+        // Show confirmation modal
+        function showConfirmation() {
+            const bank = document.getElementById('bankName').options[document.getElementById('bankName').selectedIndex].text;
+            const accountNumber = document.getElementById('accountNumber').value;
+            const accountName = document.getElementById('accountName').value;
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            
+            document.getElementById('confirmBank').textContent = bank;
+            document.getElementById('confirmAccount').textContent = accountNumber;
+            document.getElementById('confirmName').textContent = accountName;
+            document.getElementById('confirmAmount').textContent = `₦${amount.toLocaleString()}.00`;
+            
+            // Calculate total with fee (flat ₦25 fee for demo)
+            const fee = 25;
+            const total = amount + fee;
+            document.getElementById('confirmTotal').textContent = `₦${total.toLocaleString()}.00`;
+            
+            document.getElementById('confirmModal').style.display = 'flex';
+        }
+        
+        // Process the withdrawal
+        function processWithdrawal() {
+            closeModal('confirmModal');
+            
+            const bank = document.getElementById('confirmBank').textContent;
+            const accountNumber = document.getElementById('confirmAccount').textContent;
+            const amount = document.getElementById('confirmAmount').textContent;
+            
+            document.getElementById('successMessage').textContent = 
+                `Your withdrawal of ${amount} to ${bank} (${accountNumber}) is being processed.`;
+            
+            document.getElementById('successModal').style.display = 'flex';
+            
+            // Reset form
+            document.getElementById('bankName').value = '';
+            document.getElementById('accountNumber').value = '';
+            document.getElementById('accountName').value = '';
+            document.getElementById('withdrawAmount').value = '';
+            document.getElementById('withdrawDescription').value = '';
+        }
+        
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Copy to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Account number copied to clipboard: ' + text);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // You could add:
+            // - Account validation
+            // - API calls for withdrawal processing
+            // - User authentication checks
+        });
+    </script>
+</body>
+</html>

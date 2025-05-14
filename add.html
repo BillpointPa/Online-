@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit Money - Modern Banking App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #a29bfe;
+            --secondary: #00cec9;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+            --white: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--white) 0%, #f8f9ff 100%);
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 80px;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 25px 25px 0 0;
+            z-index: 0;
+        }
+        
+        .header {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .back-btn {
+            color: var(--white);
+            font-size: 20px;
+            text-decoration: none;
+        }
+        
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--white);
+        }
+        
+        .deposit-card {
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .deposit-method {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .deposit-method:last-child {
+            margin-bottom: 0;
+        }
+        
+        .deposit-method:hover {
+            background-color: var(--light);
+        }
+        
+        .method-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: rgba(108, 92, 231, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            color: var(--primary);
+            font-size: 18px;
+        }
+        
+        .method-info {
+            flex: 1;
+        }
+        
+        .method-name {
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        
+        .method-desc {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .amount-input {
+            position: relative;
+        }
+        
+        .currency-symbol {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .amount-field {
+            padding-left: 30px;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        
+        .submit-btn:hover {
+            background-color: #5a4bc9;
+        }
+        
+        .nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 420px;
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999;
+            font-size: 12px;
+            text-decoration: none;
+        }
+        
+        .nav-item.active {
+            color: var(--primary);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .modal-text {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .close-modal {
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+        
+        .success-icon {
+            text-align: center;
+            font-size: 50px;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-btn">←</a>
+            <div class="page-title">Deposit Money</div>
+            <div style="width: 24px;"></div> <!-- Spacer for alignment -->
+        </div>
+        
+        <div class="deposit-card">
+            <div class="deposit-method" onclick="selectMethod('bank')">
+                <div class="method-icon">🏦</div>
+                <div class="method-info">
+                    <div class="method-name">Bank Transfer</div>
+                    <div class="method-desc">Transfer from any Nigerian bank</div>
+                </div>
+                <div>→</div>
+            </div>
+            
+            <div class="deposit-method" onclick="selectMethod('card')">
+                <div class="method-icon">💳</div>
+                <div class="method-info">
+                    <div class="method-name">Card Payment</div>
+                    <div class="method-desc">Visa, Mastercard, Verve</div>
+                </div>
+                <div>→</div>
+            </div>
+            
+            <div class="deposit-method" onclick="selectMethod('ussd')">
+                <div class="method-icon">*️⃣</div>
+                <div class="method-info">
+                    <div class="method-name">USSD Code</div>
+                    <div class="method-desc">*737#, *906#, etc.</div>
+                </div>
+                <div>→</div>
+            </div>
+        </div>
+        
+        <div class="deposit-card" id="bankTransferForm" style="display: none;">
+            <h3 style="margin-bottom: 20px;">Bank Transfer Details</h3>
+            
+            <div class="account-details" style="background-color: var(--light); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                <div style="margin-bottom: 10px;">
+                    <strong>Bank Name:</strong> PalmPay<br>
+                    <strong>Account Number:</strong> 6683695069<br>
+                    <strong>Account Name:</strong> Billpoint
+                </div>
+                <div>
+                    <strong>Bank Name:</strong> Safe Haven MFB<br>
+                    <strong>Account Number:</strong> 6022847162<br>
+                    <strong>Account Name:</strong> Billpoint
+                </div>
+            </div>
+            
+          
+           
+
+    
+        
+        <div class="deposit-card" id="cardPaymentForm" style="display: none;">
+            <h3 style="margin-bottom: 20px;">Card Payment</h3>
+            
+            <div class="form-group">
+                <label class="form-label">Card Number</label>
+                <input type="text" class="form-input" placeholder="1234 5678 9012 3456" id="cardNumber">
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                <div style="flex: 1;">
+                    <label class="form-label">Expiry Date</label>
+                    <input type="text" class="form-input" placeholder="MM/YY" id="expiryDate">
+                </div>
+                <div style="flex: 1;">
+                    <label class="form-label">CVV</label>
+                    <input type="text" class="form-input" placeholder="123" id="cvv">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Amount to Deposit (₦)</label>
+                <div class="amount-input">
+                    <span class="currency-symbol">₦</span>
+                    <input type="number" class="form-input amount-field" placeholder="1000" id="cardAmount">
+                </div>
+            </div>
+            
+            <button class="submit-btn" onclick="submitCardPayment()">Pay Now</button>
+        </div>
+        
+        <div class="deposit-card" id="ussdForm" style="display: none;">
+            <h3 style="margin-bottom: 20px;">USSD Payment</h3>
+            
+            <div class="form-group">
+                <label class="form-label">Select Bank</label>
+                <select class="form-input" id="ussdBank">
+                    <option value="">Select your bank</option>
+                    <option value="gtb">GTBank (*737#)</option>
+                    <option value="zenith">Zenith Bank (*966#)</option>
+                    <option value="access">Access Bank (*901#)</option>
+                    <option value="uba">UBA Bank (*919#)</option>
+                    <option value="firstbank">First Bank (*894#)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Amount to Deposit (₦)</label>
+                <div class="amount-input">
+                    <span class="currency-symbol">₦</span>
+                    <input type="number" class="form-input amount-field" placeholder="1000" id="ussdAmount">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" class="form-input" placeholder="08012345678" id="phoneNumber">
+            </div>
+            
+            <button class="submit-btn" onclick="submitUssdPayment()">Generate USSD Code</button>
+        </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="success-icon">✓</div>
+            <div class="modal-title">Deposit Successful!</div>
+            <div class="modal-text" id="successMessage">
+                Your deposit of ₦1,000 has been received. Your account will be credited shortly.
+            </div>
+            <button class="close-modal" onclick="closeModal('successModal')">Done</button>
+        </div>
+    </div>
+    
+    <div class="nav">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon">🏠</div>
+            <div>Home</div>
+        </a>
+        <a href="stats.html" class="nav-item">
+            <div class="nav-icon">📊</div>
+            <div>Stats</div>
+        </a>
+        <a href="tasks.html" class="nav-item">
+            <div class="nav-icon">✅</div>
+            <div>Tasks</div>
+        </a>
+        <a href="settings.html" class="nav-item active">
+            <div class="nav-icon">⚙️</div>
+            <div>Settings</div>
+        </a>
+    </div>
+
+    <script>
+        // Current deposit method
+        let currentMethod = null;
+        
+        // Select deposit method
+        function selectMethod(method) {
+            currentMethod = method;
+            
+            // Hide all forms
+            document.getElementById('bankTransferForm').style.display = 'none';
+            document.getElementById('cardPaymentForm').style.display = 'none';
+            document.getElementById('ussdForm').style.display = 'none';
+            
+            // Show selected form
+            if (method === 'bank') {
+                document.getElementById('bankTransferForm').style.display = 'block';
+            } else if (method === 'card') {
+                document.getElementById('cardPaymentForm').style.display = 'block';
+            } else if (method === 'ussd') {
+                document.getElementById('ussdForm').style.display = 'block';
+            }
+            
+            // Scroll to form
+            document.getElementById(`${method}TransferForm`).scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Submit bank transfer
+        function submitBankTransfer() {
+            const amount = document.getElementById('bankAmount').value;
+            const name = document.getElementById('depositorName').value;
+            
+            if (!amount || amount < 1000) {
+                alert('Minimum deposit amount is ₦1,000');
+                return;
+            }
+            
+            if (!name) {
+                alert('Please enter depositor name');
+                return;
+            }
+            
+            document.getElementById('successMessage').textContent = 
+                `Your deposit of ₦${parseInt(amount).toLocaleString()} has been received. Your account will be credited shortly.`;
+            
+            document.getElementById('successModal').style.display = 'flex';
+        }
+        
+        // Submit card payment
+        function submitCardPayment() {
+            const amount = document.getElementById('cardAmount').value;
+            const cardNumber = document.getElementById('cardNumber').value;
+            const expiry = document.getElementById('expiryDate').value;
+            const cvv = document.getElementById('cvv').value;
+            
+            if (!amount || amount < 1000) {
+                alert('Minimum deposit amount is ₦1,000');
+                return;
+            }
+            
+            if (!cardNumber || cardNumber.length < 16) {
+                alert('Please enter valid card number');
+                return;
+            }
+            
+            if (!expiry || !expiry.includes('/')) {
+                alert('Please enter valid expiry date (MM/YY)');
+                return;
+            }
+            
+            if (!cvv || cvv.length < 3) {
+                alert('Please enter valid CVV');
+                return;
+            }
+            
+            document.getElementById('successMessage').textContent = 
+                `Your card payment of ₦${parseInt(amount).toLocaleString()} was successful. Your account has been credited.`;
+            
+            document.getElementById('successModal').style.display = 'flex';
+        }
+        
+        // Submit USSD payment
+        function submitUssdPayment() {
+            const amount = document.getElementById('ussdAmount').value;
+            const bank = document.getElementById('ussdBank').value;
+            const phone = document.getElementById('phoneNumber').value;
+            
+            if (!amount || amount < 1000) {
+                alert('Minimum deposit amount is ₦1,000');
+                return;
+            }
+            
+            if (!bank) {
+                alert('Please select your bank');
+                return;
+            }
+            
+            if (!phone || phone.length < 11) {
+                alert('Please enter valid phone number');
+                return;
+            }
+            
+            let ussdCode = '';
+            switch(bank) {
+                case 'gtb': ussdCode = '*737#'; break;
+                case 'zenith': ussdCode = '*966#'; break;
+                case 'access': ussdCode = '*901#'; break;
+                case 'uba': ussdCode = '*919#'; break;
+                case 'firstbank': ussdCode = '*894#'; break;
+            }
+            
+            document.getElementById('successMessage').innerHTML = 
+                `Dial <strong>${ussdCode}</strong> on your phone to complete your deposit of ₦${parseInt(amount).toLocaleString()}.<br><br>
+                Your account will be credited once payment is confirmed.`;
+            
+            document.getElementById('successModal').style.display = 'flex';
+        }
+        
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            
+            // Reset forms after successful deposit
+            if (modalId === 'successModal') {
+                document.getElementById('bankAmount').value = '';
+                document.getElementById('depositorName').value = '';
+                document.getElementById('cardAmount').value = '';
+                document.getElementById('cardNumber').value = '';
+                document.getElementById('expiryDate').value = '';
+                document.getElementById('cvv').value = '';
+                document.getElementById('ussdAmount').value = '';
+                document.getElementById('ussdBank').value = '';
+                document.getElementById('phoneNumber').value = '';
+                
+                // Hide all forms
+                document.getElementById('bankTransferForm').style.display = 'none';
+                document.getElementById('cardPaymentForm').style.display = 'none';
+                document.getElementById('ussdForm').style.display = 'none';
+            }
+        }
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // You could add:
+            // - Form validation
+            // - API calls for payment processing
+            // - User authentication checks
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Banking App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #a29bfe;
+            --secondary: #00cec9;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+            --white: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--white) 0%, #f8f9ff 100%);
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 80px;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 25px 25px 0 0;
+            z-index: 0;
+        }
+        
+        .header {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 30px;
+        }
+        
+        .greeting {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 5px;
+        }
+        
+        .user-name {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--white);
+        }
+        
+        .balance-card {
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .balance-label {
+            font-size: 14px;
+            color: var(--dark);
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+        
+        .balance-amount {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .balance-amount span {
+            font-size: 20px;
+            color: var(--primary);
+        }
+        
+        .account-number {
+            font-size: 14px;
+            color: #999;
+            text-align: center;
+            letter-spacing: 1px;
+            background: var(--light);
+            padding: 8px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .action-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--dark);
+            transition: transform 0.2s;
+            text-decoration: none;
+        }
+        
+        .action-button:hover {
+            transform: translateY(-3px);
+        }
+        
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--light);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 20px;
+            color: var(--primary);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .action-button:nth-child(1) .action-icon {
+            background-color: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+        }
+        
+        .action-button:nth-child(2) .action-icon {
+            background-color: rgba(214, 48, 49, 0.1);
+            color: var(--danger);
+        }
+        
+        .action-button:nth-child(3) .action-icon {
+            background-color: rgba(0, 184, 148, 0.1);
+            color: var(--success);
+        }
+        
+        .action-button:nth-child(4) .action-icon {
+            background-color: rgba(253, 203, 110, 0.1);
+            color: var(--warning);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .see-all {
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        
+        .tasks-container {
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .task-item:last-child {
+            border-bottom: none;
+        }
+        
+        .task-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .task-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: rgba(108, 92, 231, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 12px;
+            color: var(--primary);
+            font-size: 18px;
+        }
+        
+        .task-name {
+            font-weight: 500;
+            flex: 1;
+        }
+        
+        .task-amount {
+            font-weight: 600;
+            color: var(--success);
+            margin-right: 15px;
+        }
+        
+        .claim-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            white-space: nowrap;
+        }
+        
+        .claim-btn:hover {
+            background-color: #5a4bc9;
+        }
+        
+        .claim-btn.claimed {
+            background-color: var(--success);
+        }
+        
+        .claim-btn.inactive {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .modal-text {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .account-details {
+            background-color: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .account-item {
+            margin-bottom: 10px;
+        }
+        
+        .account-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .copy-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        
+        .close-modal {
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+        
+        .activation-amount {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 420px;
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999;
+            font-size: 12px;
+            text-decoration: none;
+        }
+        
+        .nav-item.active {
+            color: var(--primary);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            border-radius: 10px;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .task-status {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="greeting" id="greeting">Hello, user</div>
+            <div class="user-name">......@gmail.com</div>
+        </div>
+        
+        <div class="balance-card">
+            <div class="balance-label">Available Balance</div>
+            <div class="balance-amount">₦ <span id="balance">0.00</span></div>
+            <div class="account-number">*******858.279</div>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="add.html" class="action-button">
+                <div class="action-icon">+</div>
+                <span>Add Money</span>
+            </a>
+            <a href="send.html" class="action-button">
+                <div class="action-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 12L4 4L8 12L4 20L20 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span>Send Money</span>
+            </a>
+            <a href="deposit.html" class="action-button">
+                <div class="action-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 12L12 16L16 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span>Deposit</span>
+            </a>
+            <a href="withdraw.html" class="action-button">
+                <div class="action-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 12L12 8L16 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 16V8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span>Withdraw</span>
+            </a>
+        </div>
+        
+        <div class="section-header">
+            <h3 class="section-title">Earn Money Tasks</h3>
+            <a href="#" class="see-all">See all</a>
+        </div>
+        
+        <div class="tasks-container">
+            <div class="task-item">
+                <div class="task-info">
+                    <div class="task-icon">🐦</div>
+                    <div class="task-name">Claim Twitter</div>
+                    <div class="task-amount">₦2,000</div>
+                </div>
+                <button class="claim-btn" onclick="showActivationModal('Twitter', 2000)">Claim</button>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-info">
+                    <div class="task-icon">👍</div>
+                    <div class="task-name">Claim Facebook</div>
+                    <div class="task-amount">₦1,000</div>
+                </div>
+                <button class="claim-btn" onclick="showActivationModal('Facebook', 1000)">Claim</button>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-info">
+                    <div class="task-icon">📷</div>
+                    <div class="task-name">Claim Instagram</div>
+                    <div class="task-amount">₦2,000</div>
+                </div>
+                <button class="claim-btn" onclick="showActivationModal('Instagram', 2000)">Claim</button>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-info">
+                    <div class="task-icon">📺</div>
+                    <div class="task-name">Watch Ads</div>
+                    <div class="task-amount">₦5,000</div>
+                </div>
+                <button class="claim-btn" onclick="showActivationModal('Watch Ads', 5000)">Claim</button>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-info">
+                    <div class="task-icon">📱</div>
+                    <div class="task-name">Follow & Earn</div>
+                    <div class="task-amount">₦500</div>
+                </div>
+                <button class="claim-btn" onclick="showActivationModal('Follow & Earn', 500)">Claim</button>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-info">
+                    <div class="task-icon">💙</div>
+                    <div class="task-name">Love & Earn</div>
+                    <div class="task-amount">₦500</div>
+                </div>
+                <button class="claim-btn" onclick="showActivationModal('Love & Earn', 500)">Claim</button>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-info">
+                    <div class="task-icon">👻</div>
+                    <div class="task-name">Snapchat</div>
+                    <div class="task-amount">₦1,000</div>
+                </div>
+                <button class="claim-btn" onclick="showActivationModal('Snapchat', 1000)">Claim</button>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-info">
+                    <div class="task-icon">📨</div>
+                    <div class="task-name">Telegram Group</div>
+                    <div class="task-amount">₦3,000</div>
+                </div>
+                <button class="claim-btn" onclick="showActivationModal('Telegram Group', 3000)">Claim</button>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-info">
+                    <div class="task-icon">👍</div>
+                    <div class="task-name">Like on Facebook</div>
+                    <div class="task-amount">₦1,000</div>
+                </div>
+                <button class="claim-btn" onclick="showActivationModal('Like on Facebook', 1000)">Claim</button>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-info">
+                    <div class="task-icon">🤖</div>
+                    <div class="task-name">Money Making AI</div>
+                    <div class="task-amount">₦3,000</div>
+                </div>
+                <button class="claim-btn" onclick="showActivationModal('Money Making AI', 3000)">Claim</button>
+            </div>
+            
+            <div class="task-item">
+                <div class="task-info">
+                    <div class="task-icon">🎁</div>
+                    <div class="task-name">Bonus Claim</div>
+                    <div class="task-amount">₦2,000</div>
+                </div>
+                <button class="claim-btn" onclick="showActivationModal('Bonus Claim', 2000)">Claim</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="activationModal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTaskTitle">Activate to Claim</div>
+            <div class="modal-text">
+                To claim <span id="taskAmount" class="activation-amount">₦0</span> from <span id="taskName" class="activation-amount">this task</span>, please activate your account by depositing <span class="activation-amount">₦1,000</span> to one of these accounts: and you are depositing once
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="activationProgress"></div>
+            </div>
+            <div class="task-status" id="activationStatus">0% of users have activated their account</div>
+            
+            <div class="account-details">
+                <div class="account-item">
+                    <strong>Bank Name:</strong> PalmPay<br>
+                    <strong>Account Number:</strong> 6683695069<br>
+                    <strong>Account Name:</strong> Billpoint
+                    <button class="copy-btn" onclick="copyToClipboard('6683695069')">Copy Account Number</button>
+                </div>
+                
+                <div class="account-item">
+                    <strong>Bank Name:</strong> Safe Haven MFB<br>
+                    <strong>Account Number:</strong> 6022847162<br>
+                    <strong>Account Name:</strong> Billpoint
+                    <button class="copy-btn" onclick="copyToClipboard('6022847162')">Copy Account Number</button>
+                </div>
+            </div>
+            
+            <div class="modal-text">
+                After making your deposit, contact support with proof of payment to activate your account and claim your reward.
+            </div>
+            
+            <button class="close-modal" onclick="closeModal('activationModal')">I'll Activate Later</button>
+            <button class="claim-btn" style="width: 100%; margin-top: 10px;" onclick="confirmActivation()">I've Activated My Account</button>
+        </div>
+    </div>
+    
+    <div class="nav">
+        <a href="index.html" class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <div>Home</div>
+        </a>
+        <a href="stats.html" class="nav-item">
+            <div class="nav-icon">📊</div>
+            <div>Stats</div>
+        </a>
+        <a href="tasks.html" class="nav-item">
+            <div class="nav-icon">✅</div>
+            <div>withdrawal history</div>
+        </a>
+        <a href="settings.html" class="nav-item">
+            <div class="nav-icon">⚙️</div>
+            <div>Settings</div>
+        </a>
+    </div>
+
+    <script>
+        // Current balance
+        let balance = 0;
+        let currentTask = null;
+        let currentTaskAmount = 0;
+        let activated = false;
+        
+        // Set dynamic greeting based on time of day
+        function setGreeting() {
+            const hour = new Date().getHours();
+            let greeting;
+            
+            if (hour < 12) {
+                greeting = "Good Morning";
+            } else if (hour < 18) {
+                greeting = "Good Afternoon";
+            } else {
+                greeting = "Good Evening";
+            }
+            
+            document.getElementById('greeting').textContent = greeting;
+        }
+        
+        // Format balance with commas
+        function formatBalance() {
+            const balanceElement = document.getElementById('balance');
+            balanceElement.textContent = balance.toLocaleString('en-NG', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+        
+        // Show activation modal for specific task
+        function showActivationModal(taskName, taskAmount) {
+            currentTask = taskName;
+            currentTaskAmount = taskAmount;
+            
+            document.getElementById('taskName').textContent = taskName;
+            document.getElementById('taskAmount').textContent = `₦${taskAmount.toLocaleString()}`;
+            document.getElementById('activationModal').style.display = 'flex';
+            
+            // Simulate random activation progress
+            const progress = Math.floor(Math.random() * 30) + 10;
+            document.getElementById('activationProgress').style.width = `${progress}%`;
+            document.getElementById('activationStatus').textContent = `${progress}% of users have activated their account`;
+        }
+        
+        // Confirm activation
+        function confirmActivation() {
+            activated = true;
+            alert(`Your account activation for ${currentTask} is being processed. You'll receive ₦${currentTaskAmount.toLocaleString()} once verified.`);
+            closeModal('activationModal');
+            
+            // In a real app, you would:
+            // 1. Verify the activation payment
+            // 2. Add the task amount to user's balance
+            // 3. Mark the task as completed
+        }
+        
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Copy to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Account number copied to clipboard: ' + text);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            setGreeting();
+            formatBalance();
+            
+            // Simulate some random progress for demo purposes
+            setInterval(() => {
+                const progressBars = document.querySelectorAll('.progress-bar');
+                progressBars.forEach(bar => {
+                    const currentWidth = parseInt(bar.style.width) || 0;
+                    if (currentWidth < 100) {
+                        const newWidth = Math.min(currentWidth + Math.random() * 5, 100);
+                        bar.style.width = `${newWidth}%`;
+                        bar.nextElementSibling.textContent = `${Math.floor(newWidth)}% of users have activated their account`;
+                    }
+                });
+            }, 3000);
+        });
+    

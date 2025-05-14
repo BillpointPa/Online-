@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Congratulations!</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap">
+    <style>
+        :root {
+            --primary: #6c63ff;
+            --secondary: #4d44db;
+            --accent: #ff6584;
+            --light: #f8f9fa;
+            --dark: #2d3748;
+            --success: #48bb78;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--dark);
+        }
+        
+        .congrats-container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        
+        .congrats-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        p {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+        
+        .confetti-container {
+            position: relative;
+            height: 100px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: var(--accent);
+            opacity: 0;
+            animation: confettiFall 5s linear infinite;
+        }
+        
+        .confetti:nth-child(1) {
+            left: 10%;
+            animation-delay: 0s;
+            background-color: var(--primary);
+        }
+        
+        .confetti:nth-child(2) {
+            left: 20%;
+            animation-delay: 0.5s;
+            background-color: var(--accent);
+        }
+        
+        .confetti:nth-child(3) {
+            left: 30%;
+            animation-delay: 1.2s;
+            background-color: #48bb78;
+        }
+        
+        .confetti:nth-child(4) {
+            left: 40%;
+            animation-delay: 0.8s;
+            background-color: #f6ad55;
+        }
+        
+        .confetti:nth-child(5) {
+            left: 50%;
+            animation-delay: 1.5s;
+            background-color: var(--primary);
+        }
+        
+        .confetti:nth-child(6) {
+            left: 60%;
+            animation-delay: 0.3s;
+            background-color: var(--accent);
+        }
+        
+        .confetti:nth-child(7) {
+            left: 70%;
+            animation-delay: 1s;
+            background-color: #48bb78;
+        }
+        
+        .confetti:nth-child(8) {
+            left: 80%;
+            animation-delay: 0.7s;
+            background-color: #f6ad55;
+        }
+        
+        .confetti:nth-child(9) {
+            left: 90%;
+            animation-delay: 1.3s;
+            background-color: var(--primary);
+        }
+        
+        .home-button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .home-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(108, 99, 255, 0.3);
+        }
+        
+        .home-button:active {
+            transform: translateY(0);
+        }
+        
+        .home-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .home-button:hover::before {
+            opacity: 1;
+        }
+        
+        .loader {
+            display: none;
+            width: 100%;
+            height: 4px;
+            background-color: #e2e8f0;
+            border-radius: 2px;
+            margin-top: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .loader-bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .congrats-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="congrats-container">
+        <div class="confetti-container">
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+        </div>
+        <h1>Congratulations!</h1>
+        <p>You've achieved something remarkable! Your dedication and hard work have paid off. This is just the beginning of your success journey.</p>
+        <button class="home-button" id="homeButton">Continue to Home</button>
+        <div class="loader" id="loader">
+            <div class="loader-bar" id="loaderBar"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('homeButton').addEventListener('click', function() {
+            const button = this;
+            const loader = document.getElementById('loader');
+            const loaderBar = document.getElementById('loaderBar');
+            
+            // Disable button to prevent multiple clicks
+            button.disabled = true;
+            
+            // Show loader
+            loader.style.display = 'block';
+            
+            // Animate loader bar
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    // Redirect after animation completes
+                    window.location.href = 'home.html';
+                } else {
+                    width += 5;
+                    loaderBar.style.width = width + '%';
+                }
+            }, 30);
+            
+            // Change button text
+            button.innerHTML = 'Processing...';
+        });
+    </script>
+</body>
+</html>

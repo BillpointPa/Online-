@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Earning Today | YourPathToWealth</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+                        0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2.5rem;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 80%;
+            margin: 0 auto;
+        }
+        
+        .content {
+            padding: 2.5rem;
+        }
+        
+        .benefits {
+            margin-bottom: 2rem;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+        
+        .benefit-icon {
+            background-color: var(--light);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .benefit-text h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.25rem;
+            color: var(--dark);
+        }
+        
+        .benefit-text p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        .cta {
+            text-align: center;
+        }
+        
+        .cta p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+        
+        .start-button {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2), 
+                        0 2px 4px -1px rgba(79, 70, 229, 0.12);
+        }
+        
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3), 
+                        0 4px 6px -2px rgba(79, 70, 229, 0.15);
+        }
+        
+        .start-button:active {
+            transform: translateY(0);
+        }
+        
+        .loader {
+            display: none;
+            width: 100%;
+            height: 4px;
+            background-color: var(--light-gray);
+            border-radius: 2px;
+            margin-top: 1rem;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .loader-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        .testimonial {
+            background-color: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .testimonial:before {
+            content: '"';
+            position: absolute;
+            top: 0.5rem;
+            left: 1rem;
+            font-size: 3rem;
+            color: var(--primary);
+            opacity: 0.2;
+            font-family: serif;
+            line-height: 1;
+        }
+        
+        .testimonial p {
+            font-style: italic;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .testimonial-author span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: var(--success);
+            border-radius: 50%;
+            margin: 0 0.5rem;
+        }
+        
+        @media (max-width: 640px) {
+            .hero {
+                padding: 2rem 1.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+            
+            .hero p {
+                max-width: 100%;
+                font-size: 1rem;
+            }
+            
+            .content {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>Start Earning Money Today</h1>
+            <p>Join thousands who are already building financial freedom on their own terms</p>
+        </div>
+        
+        <div class="content">
+            <div class="testimonial">
+                <p>I went from #0 to making #21000 in a day.</p>
+                <div class="testimonial-author">
+                    Sarah K. <span></span> Verified Member
+                </div>
+            </div>
+            
+            <div class="benefits">
+                <div class="benefit-item">
+                    <div class="benefit-icon">1</div>
+                    <div class="benefit-text">
+                        <h3>Flexible Earning Potential</h3>
+                        <p>Work when you want, where you want. Earn based on your effort with no income ceilings.</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">2</div>
+                    <div class="benefit-text">
+                        <h3>Proven System</h3>
+                        <p>Our step-by-step method has helped over 15,000 people start earning within their first week.</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">3</div>
+                    <div class="benefit-text">
+                        <h3>24/7 Support</h3>
+                        <p>Get help whenever you need it from our dedicated success team and community.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cta">
+                <p><strong>Ready to take control of your financial future?</strong> Get started now - it only takes 2 minutes.</p>
+                <button id="startButton" class="start-button">Begin My Earning Journey</button>
+                <div id="loader" class="loader">
+                    <div id="loaderBar" class="loader-bar"></div>
+                </div>
+                <p style="font-size: 0.8rem; margin-top: 1rem; color: var(--gray);">Thanks for joining us start making money</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('startButton').addEventListener('click', function() {
+            const button = this;
+            const loader = document.getElementById('loader');
+            const loaderBar = document.getElementById('loaderBar');
+            
+            // Disable button and change text
+            button.disabled = true;
+            button.innerHTML = 'Setting Up Your Account...';
+            
+            // Show loader
+            loader.style.display = 'block';
+            
+            // Animate loader bar
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    // Redirect after animation completes
+                    window.location.href = 'process.html';
+                } else {
+                    width += 2;
+                    loaderBar.style.width = width + '%';
+                }
+            }, 20);
+            
+            // Add motivational messages during loading
+            const messages = [
+                "Preparing your dashboard...",
+                "Connecting you with opportunities...",
+                "Almost there! Just a few more seconds..."
+            ];
+            
+            setTimeout(() => {
+                button.innerHTML = messages[0];
+            }, 800);
+            
+            setTimeout(() => {
+                button.innerHTML = messages[1];
+            }, 2000);
+            
+            setTimeout(() => {
+                button.innerHTML = messages[2];
+            }, 3500);
+        });
+    </script>
+</body>
+</html>

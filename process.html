@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth System</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: var(--gray);
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-3 {
+            margin-top: 15px;
+        }
+
+        .link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .alert-danger {
+            background-color: rgba(247, 37, 133, 0.1);
+            border-left: 4px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .alert-success {
+            background-color: rgba(76, 201, 240, 0.1);
+            border-left: 4px solid var(--success);
+            color: var(--success);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo i {
+            font-size: 3rem;
+            color: var(--primary);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        .referral-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(67, 97, 238, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .referral-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .referral-code {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .referral-code-input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px 0 0 8px;
+            font-family: monospace;
+            font-weight: bold;
+            background-color: #f8f9fa;
+        }
+
+        .referral-code-btn {
+            padding: 10px 15px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .referral-code-btn:hover {
+            background-color: var(--secondary);
+        }
+
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        @media (max-width: 576px) {
+            .form-container {
+                padding: 30px 20px;
+            }
+            
+            .logo i {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div class="logo">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <h1 class="form-title" id="formTitle">Sign Up</h1>
+            
+            <div id="alertBox"></div>
+            
+            <form id="signupForm" class="auth-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" class="form-control" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" placeholder="Enter your Gmail address" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                        <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="password-container">
+                        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm your password" required>
+                        <i class="fas fa-eye toggle-password" id="toggleConfirmPassword"></i>
+                    </div>
+                </div>
+                
+                <div class="referral-section">
+                    <div class="referral-title">Referral Code (Optional)</div>
+                    <div class="referral-code">
+                        <input type="text" id="referralCode" class="referral-code-input" placeholder="Enter referral code" readonly>
+                        <button type="button" id="generateCodeBtn" class="referral-code-btn">Get Code</button>
+                    </div>
+                    <small class="text-muted">Share this code with friends for rewards</small>
+                </div>
+                
+                <button type="submit" class="btn" id="signupBtn">
+                    <span id="signupText">Sign Up</span>
+                    <span id="signupLoader" class="hidden loading-text">
+                        <span class="loader"></span> Processing...
+                    </span>
+                </button>
+                <p class="text-center mt-3">Already have an account? <span class="link" id="switchToLogin">Login</span></p>
+            </form>
+            
+            <form id="loginForm" class="auth-form hidden">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+                        <i class="fas fa-eye toggle-password" id="toggleLoginPassword"></i>
+                    </div>
+                </div>
+                <button type="submit" class="btn" id="loginBtn">
+                    <span id="loginText">Login</span>
+                    <span id="loginLoader" class="hidden loading-text">
+                        <span class="loader"></span> Authenticating...
+                    </span>
+                </button>
+                <p class="text-center mt-3">Don't have an account? <span class="link" id="switchToSignup">Sign Up</span></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const signupForm = document.getElementById('signupForm');
+        const loginForm = document.getElementById('loginForm');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const switchToSignup = document.getElementById('switchToSignup');
+        const formTitle = document.getElementById('formTitle');
+        const alertBox = document.getElementById('alertBox');
+        const generateCodeBtn = document.getElementById('generateCodeBtn');
+        const referralCodeInput = document.getElementById('referralCode');
+        const signupBtn = document.getElementById('signupBtn');
+        const signupText = document.getElementById('signupText');
+        const signupLoader = document.getElementById('signupLoader');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginText = document.getElementById('loginText');
+        const loginLoader = document.getElementById('loginLoader');
+        
+        // Password toggle elements
+        const togglePassword = document.getElementById('togglePassword');
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        const toggleLoginPassword = document.getElementById('toggleLoginPassword');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const loginPasswordInput = document.getElementById('loginPassword');
+
+        // Local storage for user data
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+
+        // Page load animation
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.style.opacity = '1';
+        });
+
+        // Switch between forms
+        switchToLogin.addEventListener('click', () => {
+            signupForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+            formTitle.textContent = 'Login';
+            clearAlert();
+        });
+
+        switchToSignup.addEventListener('click', () => {
+            loginForm.classList.add('hidden');
+            signupForm.classList.remove('hidden');
+            formTitle.textContent = 'Sign Up';
+            clearAlert();
+        });
+
+        // Toggle password visibility
+        function setupPasswordToggle(toggleElement, inputElement) {
+            toggleElement.addEventListener('click', () => {
+                const type = inputElement.getAttribute('type') === 'password' ? 'text' : 'password';
+                inputElement.setAttribute('type', type);
+                toggleElement.classList.toggle('fa-eye');
+                toggleElement.classList.toggle('fa-eye-slash');
+            });
+        }
+
+        setupPasswordToggle(togglePassword, passwordInput);
+        setupPasswordToggle(toggleConfirmPassword, confirmPasswordInput);
+        setupPasswordToggle(toggleLoginPassword, loginPasswordInput);
+
+        // Show alert message
+        function showAlert(message, type = 'danger') {
+            alertBox.innerHTML = `
+                <div class="alert alert-${type}">
+                    ${message}
+                </div>
+            `;
+        }
+
+        // Clear alert message
+        function clearAlert() {
+            alertBox.innerHTML = '';
+        }
+
+        // Generate referral code
+        generateCodeBtn.addEventListener('click', () => {
+            const code = generateReferralCode();
+            referralCodeInput.value = code;
+            generateCodeBtn.textContent = 'Copied!';
+            generateCodeBtn.style.backgroundColor = 'var(--success)';
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(code).then(() => {
+                setTimeout(() => {
+                    generateCodeBtn.textContent = 'Get Code';
+                    generateCodeBtn.style.backgroundColor = 'var(--primary)';
+                }, 2000);
+            });
+        });
+
+        // Generate random referral code
+        function generateReferralCode() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let result = '';
+            for (let i = 0; i < 8; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        // Show loading state
+        function showLoading(button, textElement, loaderElement) {
+            textElement.classList.add('hidden');
+            loaderElement.classList.remove('hidden');
+            button.disabled = true;
+        }
+
+        // Hide loading state
+        function hideLoading(button, textElement, loaderElement) {
+            textElement.classList.remove('hidden');
+            loaderElement.classList.add('hidden');
+            button.disabled = false;
+        }
+
+        // Signup form submission
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const referralCode = referralCodeInput.value;
+            
+            // Show loading state
+            showLoading(signupBtn, signupText, signupLoader);
+            
+            // Validate email format
+            if (!email.endsWith('@gmail.com')) {
+                showAlert('Please use a Gmail address for registration.');
+                hideLoading(signupBtn, signupText, signupLoader);
+                return;
+            }
+            
+            // Check if email already exists
+            const emailExists = users.some(user => user.email === email);
+            if (emailExists) {
+                showAlert('This Gmail is already registered. Please use a different Gmail or login.');
+                hideLoading(signupBtn, signupText, signupLoader);
+                return;
+            }
+            
+            // Validate password match
+            if (password !== confirmPassword) {
+                showAlert('Passwords do not match.');
+                hideLoading(signupBtn, signupText, signupLoader);
+                return;
+            }
+            
+            // Validate password strength
+            if (password.length < 6) {
+                showAlert('Password must be at least 6 characters long.');
+                hideLoading(signupBtn, signupText, signupLoader);
+                return;
+            }
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                // Create new user
+                const newUser = {
+                    id: Date.now().toString(),
+                    name,
+                    email,
+                    password, // In a real app, password should be hashed
+                    referralCode: referralCode || null,
+                    createdAt: new Date().toISOString()
+                };
+                
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                // Redirect to congratulations page
+                window.location.href = 'congratulations.html';
+            }, 1500);
+        });
+
+        // Login form submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const password = document.getElementById('loginPassword').value;
+            
+            // Show loading state
+            showLoading(loginBtn, loginText, loginLoader);
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                // Find user
+                const user = users.find(user => user.email === email);
+                
+                if (!user) {
+                    showAlert('No account found with this email. Please sign up.');
+                    hideLoading(loginBtn, loginText, loginLoader);
+                    return;
+                }
+                
+                if (user.password !== password) {
+                    showAlert('Incorrect password. Please try again.');
+                    hideLoading(loginBtn, loginText, loginLoader);
+                    return;
+                }
+                
+                // Redirect to home page
+                window.location.href = 'home.html';
+            }, 1500);
+        });
+
+        // If you want to create the congratulation.html and home.html pages automatically
+        // This would only work if you're running this as a standalone file
+        function createRedirectPages() {
+            if (!localStorage.getItem('pagesCreated')) {
+                // Congratulations page
+                const congratsPage = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Congratulations!</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 100vh;
+                            background-color: #f0f8ff;
+                            text-align: center;
+                        }
+                        .container {
+                            background: white;
+                            padding: 40px;
+                            border-radius: 10px;
+                            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                        }
+                        h1 {
+                            color: #4361ee;
+                        }
+                        .icon {
+                            font-size: 50px;
+                            color: #4cc9f0;
+                            margin-bottom: 20px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="icon">🎉</div>
+                        <h1>Congratulations!</h1>
+                        <p>Your account has been successfully created.</p>
+                        <p>You can now enjoy all our services.</p>
+                        <a href="index.html" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: #4361ee; color: white; text-decoration: none; border-radius: 5px;">Continue</a>
+                    </div>
+                </body>
+                </html>
+                `;
+                
+                // Home page
+                const homePage = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Welcome Home</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            margin: 0;
+                            padding: 0;
+                            background-color: #f5f5f5;
+                        }
+                        header {
+                            background: #4361ee;
+                            color: white;
+                            padding: 20px;
+                            text-align: center;
+                        }
+                        .container {
+                            max-width: 1200px;
+                            margin: 20px auto;
+                            padding: 20px;
+                            background: white;
+                            border-radius: 10px;
+                            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                        }
+                        .welcome-message {
+                            font-size: 24px;
+                            color: #4361ee;
+                            margin-bottom: 20px;
+                        }
+                        a {
+                            display: inline-block;
+                            margin-top: 20px;
+                            padding: 10px 20px;
+                            background: #4361ee;
+                            color: white;
+                            text-decoration: none;
+                            border-radius: 5px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <header>
+                        <h1>Welcome to Our Platform</h1>
+                    </header>
+                    <div class="container">
+                        <div class="welcome-message">Hello! You're successfully logged in.</div>
+                        <p>This is your personalized dashboard. More features coming soon!</p>
+                        <a href="index.html">Logout</a>
+                    </div>
+                </body>
+                </html>
+                `;
+                
+                // Create blob URLs for the pages
+                const congratsBlob = new Blob([congratsPage], { type: 'text/html' });
+                const homeBlob = new Blob([homePage], { type: 'text/html' });
+                
+                // Store the URLs in localStorage
+                localStorage.setItem('congratsPage', URL.createObjectURL(congratsBlob));
+                localStorage.setItem('homePage', URL.createObjectURL(homeBlob));
+                localStorage.setItem('pagesCreated', 'true');
+            }
+        }
+
+        // Initialize the pages
+        createRedirectPages();
+    </script>
+</body>
+</html>

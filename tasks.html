@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 Withdrawal History</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 25px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .header h1 {
+            color: #046a38; /* Nigerian green */
+            margin: 0;
+            font-size: 28px;
+        }
+        .header p {
+            color: #666;
+            margin: 10px 0 0;
+            font-size: 16px;
+        }
+        .stats-summary {
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-item .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #046a38;
+        }
+        .stat-item .label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .withdrawal-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .withdrawal-table th {
+            background-color: #046a38;
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        .withdrawal-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .withdrawal-table tr:last-child td {
+            border-bottom: none;
+        }
+        .withdrawal-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            background-color: #e6f7ee;
+            color: #28a745;
+        }
+        .amount {
+            font-weight: bold;
+            color: #046a38;
+        }
+        .bank {
+            color: #555;
+        }
+        .date {
+            color: #666;
+            font-size: 14px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 14px;
+        }
+        @media (max-width: 600px) {
+            .stats-summary {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .withdrawal-table {
+                font-size: 14px;
+            }
+            .withdrawal-table th, 
+            .withdrawal-table td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>2025 Withdrawal History</h1>
+            <p>All successful withdrawals in Nigerian Naira (₦)</p>
+        </div>
+        
+        <div class="stats-summary">
+            <div class="stat-item">
+                <div class="value">₦0.00</div>
+                <div class="label">Total Withdrawn</div>
+            </div>
+            <div class="stat-item">
+                <div class="value">0</div>
+                <div class="label">Total Transactions</div>
+            </div>
+            <div class="stat-item">
+                <div class="value">₦0.00</div>
+                <div class="label">Average Withdrawal</div>
+            </div>
+        </div>
+        
+        <table class="withdrawal-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Bank Details</th>
+                    <th>Status</th>
+                    <th>Reference</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
